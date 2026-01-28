@@ -202,17 +202,23 @@ def test_full_pipeline_runs():
 
 ## Backward Compatibility
 
-### Bash Scripts Deprecated (Not Removed)
+### Bash Scripts Removed
 
-The original bash scripts remain in `scripts/` for:
-1. **Backward compatibility** with existing workflows
-2. **Reference implementation** for Python version
-3. **Transition period** for users
+**Update (2026-01-27)**: Deprecated bash step scripts have been removed to eliminate redundancy.
 
-**Deprecation timeline:**
-- **2026-01**: Both versions coexist
-- **2026-06**: Python recommended, bash deprecated warning
-- **2027-01**: Bash scripts removed (after 1 year)
+**Removed scripts:**
+- `0_prepare_data.sh` - Use `0_prepare_data.py`
+- `1_skull_strip.sh` - Use `1_skull_strip.py`
+- `2_combine_t2.sh` - Use `2_combine_t2.py`
+- `3_register_to_mni.sh` - Use `3_register_to_mni.py`
+- `4_segment_tubers.sh` - Use `4_segment_tubers.py`
+- `run_pipeline.sh` - Use `run_pipeline.py`
+
+**Retained bash scripts (necessary for operations):**
+- `submit_gpu_job.sh` - SLURM job submission wrapper
+- `setup_directories.sh` - Directory setup automation
+- `test_docker_slurm.sh` - Container testing on compute nodes
+- `validate_installation.sh` - Installation validation
 
 ### Migration Checklist for Existing Users
 

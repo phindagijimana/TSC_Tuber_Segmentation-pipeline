@@ -1,32 +1,44 @@
 # TSC Tuber Segmentation Pipeline - Scripts
 
-This directory contains the modular pipeline scripts for automated tuber segmentation in Tuberous Sclerosis Complex (TSC) patients.
+This directory contains the Python-based pipeline scripts for automated tuber segmentation in Tuberous Sclerosis Complex (TSC) patients.
 
 ## Quick Start
 
 ### Full Pipeline (CPU)
 ```bash
-./run_pipeline.sh
+python3 scripts/run_pipeline.py
 ```
 
 ### Full Pipeline (GPU - Recommended)
 ```bash
-./submit_gpu_job.sh
+./scripts/submit_gpu_job.sh
 ```
 
 ---
 
 ## Scripts Overview
 
-| Script | Purpose | Execution Mode |
-|--------|---------|----------------|
-| `run_pipeline.sh` | Main orchestrator (CPU) | Interactive |
-| `submit_gpu_job.sh` | GPU job submission | SLURM batch |
-| `0_prepare_data.sh` | Organize input data | Called by orchestrator |
-| `1_skull_strip.sh` | Skull-stripping | Called by orchestrator |
-| `2_combine_t2.sh` | T2 combination | Called by orchestrator |
-| `3_register_to_mni.sh` | MNI registration | Called by orchestrator |
-| `4_segment_tubers.sh` | Tuber segmentation | Called by orchestrator |
+### Python Pipeline Scripts
+
+| Script | Purpose | Type |
+|--------|---------|------|
+| `run_pipeline.py` | Main orchestrator | Python |
+| `pipeline_utils.py` | Shared utilities | Python module |
+| `0_prepare_data.py` | Organize input data | Python |
+| `1_skull_strip.py` | Skull-stripping | Python |
+| `2_combine_t2.py` | T2 combination | Python |
+| `3_register_to_mni.py` | MNI registration | Python |
+| `4_segment_tubers.py` | Tuber segmentation | Python |
+| `test_docker.py` | Container testing | Python |
+
+### Bash Helper Scripts
+
+| Script | Purpose | Type |
+|--------|---------|------|
+| `submit_gpu_job.sh` | SLURM GPU job submission | Bash |
+| `setup_directories.sh` | Create directory structure | Bash |
+| `test_docker_slurm.sh` | Test containers on compute nodes | Bash |
+| `validate_installation.sh` | Validate installation | Bash |
 
 ---
 
@@ -34,15 +46,15 @@ This directory contains the modular pipeline scripts for automated tuber segment
 
 ### 1. Run Full Pipeline on CPU
 ```bash
-./run_pipeline.sh
+python3 scripts/run_pipeline.py
 ```
 - Runs all 5 steps (0-4)
-- Takes ~2-3 hours for 3 subjects
+- Takes ~4-6 hours for 3 subjects
 - Good for testing
 
 ### 2. Submit GPU Job (Production)
 ```bash
-./submit_gpu_job.sh
+./scripts/submit_gpu_job.sh
 ```
 - Runs all 5 steps with GPU acceleration (Step 4 only)
 - Takes ~1.5-2 hours for 3 subjects
@@ -50,46 +62,55 @@ This directory contains the modular pipeline scripts for automated tuber segment
 
 ### 3. Resume from a Specific Step
 ```bash
-./run_pipeline.sh --start-from 3
+python3 scripts/run_pipeline.py --start-from 3
 ```
 - Skips steps 0-2, starts from step 3 (MNI registration)
 - Useful when a step fails
 
 ### 4. Force Re-run All Steps
 ```bash
-./run_pipeline.sh --force
+python3 scripts/run_pipeline.py --force
 ```
 - Ignores existing outputs
 - Re-runs all steps from scratch
 
 ### 5. Custom GPU Resources
 ```bash
-./submit_gpu_job.sh --gpu-mem 24 --mem 64 --cpus 16 --time 08:00:00
+./scripts/submit_gpu_job.sh --gpu-mem 24 --mem 64 --cpus 16 --time 08:00:00
 ```
 - Request 24GB GPU, 64GB RAM, 16 CPUs, 8-hour limit
 - Use for larger datasets
 
 ### 6. Dry Run (Preview Job Script)
 ```bash
-./submit_gpu_job.sh --dry-run
+./scripts/submit_gpu_job.sh --dry-run
 ```
 - Shows the SLURM batch script without submitting
 - Good for debugging
+
+### 7. Run Individual Steps
+```bash
+# Run only skull stripping
+python3 scripts/1_skull_strip.py
+
+# Run only segmentation
+python3 scripts/4_segment_tubers.py
+```
 
 ---
 
 ## Pipeline Steps
 
 ### Step 0: Data Preparation
-**Script**: `0_prepare_data.sh`  
-**Input**: `TSC_MRI_SUB/{subject}/*.nii`  
-**Output**: `preprocessing/MRI_files/{subject}/*.nii`  
-**Purpose**: Organize raw data into per-subject folders with validation
+**Script**: `0_prepare_data.py`  
+**Input**: `preprocessing/raw_data/{subject}/*.nii`  
+**Output**: Validates and organizes files  
+**Purpose**: Ensure files follow naming conventions
 
 ### Step 1: Skull Stripping
-**Script**: `1_skull_strip.sh`  
-**Docker**: `ivansanchezfernandez/skull_strip_and_create_masks_with_synthstrip`  
-**Input**: `preprocessing/MRI_files/{subject}/`  
+**Script**: `1_skull_strip.py`  
+**Container**: `ivansanchezfernandez/skull_strip_and_create_masks_with_synthstrip`  
+**Input**: `preprocessing/raw_data/{subject}/`  
 **Output**: 
 - `preprocessing/skull_stripped_MRIs/{subject}/` (brain-only)
 - `preprocessing/masks/{subject}/` (brain masks)
@@ -97,25 +118,26 @@ This directory contains the modular pipeline scripts for automated tuber segment
 **Time**: ~1-3 min/subject
 
 ### Step 2: T2 Combination
-**Script**: `2_combine_t2.sh`  
-**Docker**: `ivansanchezfernandez/combine_t2_files_with_niftymic`  
+**Script**: `2_combine_t2.py`  
+**Container**: `ivansanchezfernandez/combine_t2_files_with_niftymic`  
 **Input**: 
 - `preprocessing/skull_stripped_MRIs/{subject}/`
 - `preprocessing/masks/{subject}/`
 
 **Output**: `preprocessing/combined_MRIs/{subject}/`  
-**Time**: ~10-30 min/subject (only for subjects with multiple T2s)
+**Time**: ~10-30 min/subject (only for subjects with multiple T2s)  
+**Note**: Uses first T2 as workaround if combination fails
 
 ### Step 3: MNI Registration
-**Script**: `3_register_to_mni.sh`  
-**Docker**: `ivansanchezfernandez/bias_correct_resample_and_register_to_MNI_with_ants`  
+**Script**: `3_register_to_mni.py`  
+**Container**: `ivansanchezfernandez/bias_correct_resample_and_register_to_mni_with_ants`  
 **Input**: `preprocessing/combined_MRIs/{subject}/`  
 **Output**: `preprocessing/preprocessed_MRIs/{subject}/`  
 **Time**: ~10-30 min/subject
 
 ### Step 4: Tuber Segmentation
-**Script**: `4_segment_tubers.sh`  
-**Docker**: `ivansanchezfernandez/segment_tubers_and_quantify_tuber_burden_with_tsccnn3d_dropout`  
+**Script**: `4_segment_tubers.py`  
+**Container**: `ivansanchezfernandez/segment_tubers_and_quantify_tuber_burden_with_tsccnn3d_dropout`  
 **Input**: `preprocessing/preprocessed_MRIs/{subject}/`  
 **Output**: 
 - `results/{subject}/` (segmentations)
@@ -123,7 +145,7 @@ This directory contains the modular pipeline scripts for automated tuber segment
 
 **Time**: 
 - CPU: ~5-15 min/subject
-- GPU: ~1-2 min/subject
+- GPU: ~54 seconds/subject
 
 ---
 
@@ -153,23 +175,30 @@ scancel <JOB_ID>
 
 ## Troubleshooting
 
-### Docker Not Running
+### Container Not Available
 ```bash
-# Check Docker status
-docker ps
+# Check Apptainer/Singularity
+apptainer --version
 
-# If not running, start Docker daemon (requires admin)
-sudo systemctl start docker
+# Test container access
+python3 scripts/test_docker.py
+
+# Test on compute node
+sbatch scripts/test_docker_slurm.sh
 ```
 
 ### Out of Memory
 - Increase `--mem` in `submit_gpu_job.sh`
 - Process subjects one at a time
+- Check available system resources
 
 ### Step Failed
 ```bash
 # Resume from failed step (e.g., step 2)
-./run_pipeline.sh --start-from 2
+python3 scripts/run_pipeline.py --start-from 2
+
+# Force re-run with more verbose output
+python3 scripts/run_pipeline.py --start-from 2 --force
 ```
 
 ### Check Logs
@@ -187,10 +216,11 @@ All steps generate timestamped logs in `logs/`:
 ## Requirements
 
 ### System
-- Linux (tested on CentOS/RHEL 9)
-- Docker 5.0+
-- SLURM (for GPU jobs)
-- NVIDIA GPU + drivers (for GPU acceleration)
+- Linux (tested on RHEL 8/9, Ubuntu 20.04+)
+- Python 3.7+ (no external packages needed)
+- Apptainer/Singularity OR Docker
+- SLURM (for GPU jobs, optional)
+- NVIDIA GPU + drivers (optional, for GPU acceleration)
 
 ### Input Data
 - NIfTI format (`.nii` or `.nii.gz`)
@@ -199,6 +229,23 @@ All steps generate timestamped logs in `logs/`:
   - 1× T1 (axial or MPRAGE)
   - 1× T2 (axial recommended, or axial + coronal)
   - 1× FLAIR (axial recommended)
+
+---
+
+## Python Module: `pipeline_utils.py`
+
+### Classes
+
+- **`PipelineConfig`**: Configuration and path management
+- **`PipelineLogger`**: Centralized logging with file and console output
+- **`DockerManager`**: Container operations (Docker/Apptainer/Singularity)
+- **`FileValidator`**: NIfTI file validation and naming checks
+- **`Timer`**: Execution timing and performance tracking
+
+### Functions
+
+- `detect_gpu()`: Check GPU availability
+- `discover_subjects()`: Find all subject directories
 
 ---
 
@@ -224,15 +271,13 @@ If you use this pipeline, please cite:
 
 For issues or questions:
 1. Check log files in `logs/`
-2. Review `implementation.md` for detailed documentation
-3. Verify input data naming conventions
-4. Ensure Docker images are properly pulled
+2. Review [SETUP.md](../SETUP.md) for detailed setup instructions
+3. Review [implementation.md](../implementation.md) for architecture details
+4. Verify input data naming conventions
+5. Ensure containers are accessible
 
 ---
 
 **Author**: Tuber Pipeline Development Team  
 **Date**: 2026-01-27  
-**Version**: 1.0
-
-
-
+**Version**: 2.0 (Python)
