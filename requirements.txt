@@ -1,0 +1,29 @@
+# TSC Tuber Segmentation Pipeline - Python Dependencies
+#
+# This pipeline uses only Python standard library modules for maximum portability.
+# No external dependencies are required for the core pipeline.
+#
+# Standard library modules used:
+# - argparse (CLI argument parsing)
+# - dataclasses (data structures)
+# - datetime (timestamps)
+# - logging (comprehensive logging)
+# - pathlib (modern path handling)
+# - shutil (file operations)
+# - subprocess (Docker command execution)
+# - sys (system operations)
+# - re (regular expressions)
+#
+# Python version requirement:
+# Python >= 3.7 (for dataclasses)
+#
+# Optional dependencies for development/testing:
+# pytest>=7.0.0  # for unit tests (future)
+# black>=22.0.0  # for code formatting (future)
+# mypy>=0.950    # for type checking (future)
+
+# No runtime dependencies required!
+# The pipeline uses Python standard library only.
+
+
+

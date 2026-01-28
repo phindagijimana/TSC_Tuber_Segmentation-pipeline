@@ -1,0 +1,109 @@
+# TSC Tuber Segmentation Pipeline - Git Ignore
+# Exclude data, results, and temporary files
+
+# ============================================================================
+# Data Directories (Subject MRI data)
+# ============================================================================
+Info/TSC_MRI_SUB/
+preprocessing/
+results/
+data/
+
+# ============================================================================
+# Logs and Temporary Files
+# ============================================================================
+logs/
+*.log
+*.out
+*.err
+slurm-*.out
+slurm-*.err
+slurm_batch_*.sh
+
+# ============================================================================
+# Apptainer/Singularity Cache
+# ============================================================================
+.apptainer/
+.singularity/
+*.sif
+*.simg
+
+# ============================================================================
+# Python
+# ============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ============================================================================
+# Jupyter Notebook
+# ============================================================================
+.ipynb_checkpoints
+*.ipynb
+
+# ============================================================================
+# IDE and Editor Files
+# ============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.bak
+
+# ============================================================================
+# System Files
+# ============================================================================
+Thumbs.db
+.directory
+*.tmp
+
+# ============================================================================
+# Documentation (keep only essential docs)
+# ============================================================================
+Info/Instructions_docs_other_docs/
+*.pdf
+*.docx
+*.html
+
+# ============================================================================
+# Keep Important Documentation
+# ============================================================================
+!README.md
+!QUICK_START_PYTHON.md
+!PYTHON_MIGRATION.md
+!PYTHON_REWRITE_SUMMARY.md
+!CONTAINER_FIXES.md
+!implementation.md
+
