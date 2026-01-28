@@ -131,14 +131,14 @@ def run_step(
         )
         
         timer.stop()
-        logger.info(f"✓ Step {step.number} completed successfully in {timer.elapsed_str()}")
+        logger.info(f"  Step {step.number} completed successfully in {timer.elapsed_str()}")
         return True
         
     except subprocess.CalledProcessError as e:
-        logger.error(f"✗ Step {step.number} failed with exit code {e.returncode}")
+        logger.error(f"x Step {step.number} failed with exit code {e.returncode}")
         return False
     except Exception as e:
-        logger.error(f"✗ Step {step.number} failed: {e}")
+        logger.error(f"x Step {step.number} failed: {e}")
         return False
 
 
@@ -208,10 +208,10 @@ For GPU-accelerated execution, use: ./submit_gpu_job.sh
     logger.info("")
     
     if args.force:
-        logger.info("⚠ Force mode: Will re-run all steps")
+        logger.info("  Force mode: Will re-run all steps")
     
     if args.start_from > 0:
-        logger.info(f"⚠ Starting from step: {args.start_from}")
+        logger.info(f"  Starting from step: {args.start_from}")
     
     logger.info("")
     

@@ -67,13 +67,13 @@ pull_docker_image() {
     log "Checking Docker image: ${image}"
     
     if docker image inspect "$image" &> /dev/null; then
-        log "  ✓ Image already available locally"
+        log "    Image already available locally"
     else
         log "  Pulling Docker image (this may take several minutes, ~several GB)..."
         if ! docker pull "$image"; then
             error_exit "Failed to pull Docker image: ${image}"
         fi
-        log "  ✓ Image pulled successfully"
+        log "    Image pulled successfully"
     fi
 }
 
@@ -126,7 +126,7 @@ run_t2_combination_for_subject() {
         -v "${subject_masks}:/masks:ro" \
         -v "${subject_output}:/output" \
         "$DOCKER_IMAGE" >> "$LOG_FILE" 2>&1; then
-        log "  ✗ Container execution failed"
+        log "  x Container execution failed"
         return 1
     fi
     
@@ -138,11 +138,11 @@ run_t2_combination_for_subject() {
     # Validate outputs
     local output_count=$(find "$subject_output" -type f \( -name "*.nii" -o -name "*.nii.gz" \) 2>/dev/null | wc -l)
     
-    log "  ✓ Completed in ${minutes}m ${seconds}s"
+    log "    Completed in ${minutes}m ${seconds}s"
     log "  Output files: ${output_count}"
     
     if [[ $output_count -eq 0 ]]; then
-        log "  ⚠ WARNING: No output files generated"
+        log "    WARNING: No output files generated"
         return 1
     fi
     
@@ -233,11 +233,11 @@ main() {
         
         if copy_subject_files "$subject"; then
             ((success++))
-            log "  ✓ Files copied successfully"
+            log "    Files copied successfully"
         else
             ((failed++))
             failed_list+=("$subject")
-            log "  ✗ Copy failed"
+            log "  x Copy failed"
         fi
         log ""
     done
@@ -251,11 +251,11 @@ main() {
         
         if run_t2_combination_for_subject "$subject"; then
             ((success++))
-            log "  ✓ ${subject} completed successfully"
+            log "    ${subject} completed successfully"
         else
             ((failed++))
             failed_list+=("$subject")
-            log "  ✗ ${subject} failed"
+            log "  x ${subject} failed"
         fi
         log ""
     done

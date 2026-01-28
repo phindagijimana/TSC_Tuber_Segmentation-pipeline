@@ -98,10 +98,10 @@ def process_subject(
         
         if FileValidator.validate_filename(filename, subject):
             shutil.copy2(file_path, output_dir / filename)
-            logger.info(f"    ✓ {filename}")
+            logger.info(f"      {filename}")
             valid_files += 1
         else:
-            logger.warning(f"    ✗ {filename} (invalid naming convention)")
+            logger.warning(f"    x {filename} (invalid naming convention)")
             invalid_files += 1
     
     # Count sequences
@@ -117,22 +117,22 @@ def process_subject(
     has_error = False
     
     if counts["T1"] == 0:
-        logger.warning("  ⚠ WARNING: No T1 sequence found")
+        logger.warning("    WARNING: No T1 sequence found")
         error_messages.append("No T1 sequence")
         has_error = True
     
     if counts["T2"] == 0:
-        logger.warning("  ⚠ WARNING: No T2 sequence found")
+        logger.warning("    WARNING: No T2 sequence found")
         error_messages.append("No T2 sequence")
         has_error = True
     
     if counts["FLAIR"] == 0:
-        logger.warning("  ⚠ WARNING: No FLAIR sequence found")
+        logger.warning("    WARNING: No FLAIR sequence found")
         error_messages.append("No FLAIR sequence")
         has_error = True
     
     if not has_error:
-        logger.info("  ✓ Subject validation passed")
+        logger.info("    Subject validation passed")
     
     logger.info(f"  Copied: {valid_files} valid file(s)")
     if invalid_files > 0:
@@ -229,7 +229,7 @@ def main():
         
         if failed > 0:
             logger.info("")
-            logger.info("⚠ Subjects with issues:")
+            logger.info("  Subjects with issues:")
             for result in results:
                 if result.has_error:
                     errors = ", ".join(result.error_messages)
@@ -237,7 +237,7 @@ def main():
             logger.info("")
             logger.info("WARNING: Some subjects may not process correctly in subsequent steps.")
         else:
-            logger.info("✓ All subjects validated successfully")
+            logger.info("  All subjects validated successfully")
         
         logger.info("")
         logger.info(f"Output directory: {output_base}")

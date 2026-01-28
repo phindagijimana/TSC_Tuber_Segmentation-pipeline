@@ -128,16 +128,16 @@ echo ""
 # Check Docker/Singularity availability
 echo "Checking container runtime..."
 if command -v docker &> /dev/null; then
-    echo "✓ Docker found: \$(docker --version)"
+    echo "  Docker found: \$(docker --version)"
     RUNTIME="docker"
 elif command -v singularity &> /dev/null; then
-    echo "✓ Singularity found: \$(singularity --version)"
+    echo "  Singularity found: \$(singularity --version)"
     RUNTIME="singularity"
 elif command -v apptainer &> /dev/null; then
-    echo "✓ Apptainer found: \$(apptainer --version)"
+    echo "  Apptainer found: \$(apptainer --version)"
     RUNTIME="apptainer"
 else
-    echo "✗ No container runtime found (docker/singularity/apptainer)"
+    echo "x No container runtime found (docker/singularity/apptainer)"
     exit 1
 fi
 echo ""
@@ -175,9 +175,9 @@ TEST_EXIT=$?
 echo ""
 echo "=========================================="
 if [ $TEST_EXIT -eq 0 ]; then
-    echo "✓ Docker container test PASSED"
+    echo "  Docker container test PASSED"
 else
-    echo "✗ Docker container test FAILED (exit code: $TEST_EXIT)"
+    echo "x Docker container test FAILED (exit code: $TEST_EXIT)"
 fi
 echo "End time: $(date)"
 echo "=========================================="
@@ -224,7 +224,7 @@ main() {
     # Generate batch script
     log "Generating test batch script..."
     local batch_script=$(generate_test_script)
-    log "  ✓ Generated: ${batch_script}"
+    log "    Generated: ${batch_script}"
     log ""
     
     # Submit job
@@ -241,7 +241,7 @@ main() {
         error_exit "Could not parse job ID from: ${submit_output}"
     fi
     
-    log "  ✓ Job submitted successfully"
+    log "    Job submitted successfully"
     log "  Job ID: ${job_id}"
     log ""
     
@@ -294,7 +294,7 @@ main() {
     done
     
     if [[ $elapsed -ge $max_wait ]]; then
-        log "⚠ Timeout waiting for job to start"
+        log "  Timeout waiting for job to start"
         log "   Job is still in queue. Monitor manually with:"
         log "   squeue -j ${job_id}"
         log "   tail -f ${LOG_DIR}/test_docker_slurm-${job_id}.out"
@@ -336,12 +336,12 @@ main() {
         local exit_code=$(sacct -j ${job_id} -o ExitCode -n | tail -1 | awk '{print $1}' | cut -d: -f1)
         
         if [[ "$exit_code" == "0" ]]; then
-            log "✓ Test PASSED - Docker works on compute nodes!"
+            log "  Test PASSED - Docker works on compute nodes!"
             log ""
             log "Next step: Run the full pipeline"
             log "  ./scripts/submit_gpu_job.sh"
         else
-            log "✗ Test FAILED (exit code: ${exit_code})"
+            log "x Test FAILED (exit code: ${exit_code})"
             log ""
             log "Review output file for details:"
             log "  less ${output_file}"

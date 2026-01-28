@@ -137,17 +137,17 @@ def run_t2_combination(
         output_files = FileValidator.find_nifti_files(output_dir)
         output_count = len(output_files)
         
-        logger.info(f"  ✓ Completed in {timer.elapsed_str()}")
+        logger.info(f"    Completed in {timer.elapsed_str()}")
         logger.info(f"  Output files: {output_count}")
         
         if output_count == 0:
-            logger.warning("  ⚠ WARNING: No output files generated")
+            logger.warning("    WARNING: No output files generated")
             return False, duration_sec
         
         return True, duration_sec
         
     except Exception as e:
-        logger.error(f"  ✗ Container execution failed: {e}")
+        logger.error(f"  x Container execution failed: {e}")
         return False, 0
 
 
@@ -242,10 +242,10 @@ def main():
                 logger
             ):
                 success_count += 1
-                logger.info("  ✓ Files copied successfully")
+                logger.info("    Files copied successfully")
             else:
                 failed_subjects.append(subject)
-                logger.info("  ✗ Copy failed")
+                logger.info("  x Copy failed")
             
             logger.info("")
         
@@ -268,10 +268,10 @@ def main():
             if success:
                 success_count += 1
                 total_time += duration
-                logger.info(f"  ✓ {subject} completed successfully")
+                logger.info(f"    {subject} completed successfully")
             else:
                 failed_subjects.append(subject)
-                logger.info(f"  ✗ {subject} failed")
+                logger.info(f"  x {subject} failed")
             
             logger.info("")
         

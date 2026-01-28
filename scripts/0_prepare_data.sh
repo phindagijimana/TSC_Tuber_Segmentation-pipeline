@@ -166,10 +166,10 @@ main() {
             # Validate filename
             if validate_filename "$filename" "$subject"; then
                 cp "$file" "${subject_output}/${filename}"
-                log "    ✓ ${filename}"
+                log "      ${filename}"
                 ((valid_files++))
             else
-                log "    ✗ ${filename} (invalid naming convention)"
+                log "    x ${filename} (invalid naming convention)"
                 ((invalid_files++))
             fi
         done
@@ -185,22 +185,22 @@ main() {
         # Validate minimum requirements
         local has_error=false
         if [[ $t1_count -eq 0 ]]; then
-            log "  ⚠ WARNING: No T1 sequence found"
+            log "    WARNING: No T1 sequence found"
             has_error=true
         fi
         if [[ $t2_count -eq 0 ]]; then
-            log "  ⚠ WARNING: No T2 sequence found"
+            log "    WARNING: No T2 sequence found"
             has_error=true
         fi
         if [[ $flair_count -eq 0 ]]; then
-            log "  ⚠ WARNING: No FLAIR sequence found"
+            log "    WARNING: No FLAIR sequence found"
             has_error=true
         fi
         
         if [[ "$has_error" == "true" ]]; then
             failed_subjects+=("${subject} (missing required sequences)")
         else
-            log "  ✓ Subject validation passed"
+            log "    Subject validation passed"
         fi
         
         log "  Copied: ${valid_files} valid file(s)"
@@ -219,14 +219,14 @@ main() {
     
     if [[ ${#failed_subjects[@]} -gt 0 ]]; then
         log ""
-        log "⚠ Subjects with issues:"
+        log "  Subjects with issues:"
         for failed in "${failed_subjects[@]}"; do
             log "  - ${failed}"
         done
         log ""
         log "WARNING: Some subjects may not process correctly in subsequent steps."
     else
-        log "✓ All subjects validated successfully"
+        log "  All subjects validated successfully"
     fi
     
     log ""

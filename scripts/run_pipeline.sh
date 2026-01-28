@@ -133,7 +133,7 @@ run_step() {
     local minutes=$((duration / 60))
     local seconds=$((duration % 60))
     
-    log "✓ Step ${step_num} completed successfully in ${minutes}m ${seconds}s"
+    log "  Step ${step_num} completed successfully in ${minutes}m ${seconds}s"
 }
 
 # ============================================================================
@@ -178,11 +178,11 @@ main() {
     log ""
     
     if [[ "$FORCE_RERUN" == "true" ]]; then
-        log "⚠ Force mode: Will re-run all steps"
+        log "  Force mode: Will re-run all steps"
     fi
     
     if [[ $START_FROM -gt 0 ]]; then
-        log "⚠ Starting from step: ${START_FROM}"
+        log "  Starting from step: ${START_FROM}"
     fi
     
     log ""

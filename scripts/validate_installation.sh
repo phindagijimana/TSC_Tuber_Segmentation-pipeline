@@ -39,17 +39,17 @@ print_header() {
 }
 
 check_pass() {
-    echo -e "${GREEN}✓${NC} $1"
+    echo -e "${GREEN} ${NC} $1"
     ((PASS++))
 }
 
 check_fail() {
-    echo -e "${RED}✗${NC} $1"
+    echo -e "${RED}x${NC} $1"
     ((FAIL++))
 }
 
 check_warn() {
-    echo -e "${YELLOW}⚠${NC} $1"
+    echo -e "${YELLOW} ${NC} $1"
     ((WARN++))
 }
 
@@ -244,7 +244,7 @@ echo -e "${RED}Failed: ${FAIL}${NC}"
 echo ""
 
 if [[ $FAIL -eq 0 ]]; then
-    echo -e "${GREEN}✓ Pipeline is ready to run!${NC}"
+    echo -e "${GREEN}  Pipeline is ready to run!${NC}"
     echo ""
     echo "Quick start:"
     echo "  CPU mode:  ./scripts/run_pipeline.sh"
@@ -253,7 +253,7 @@ if [[ $FAIL -eq 0 ]]; then
     echo "For help:    ./scripts/run_pipeline.sh --help"
     exit 0
 else
-    echo -e "${RED}✗ Pipeline has critical issues. Please fix failures above.${NC}"
+    echo -e "${RED}x Pipeline has critical issues. Please fix failures above.${NC}"
     exit 1
 fi
 

@@ -52,10 +52,10 @@ Containers from `ivansanchezfernandez` have different directory structures:
 
 | Step | Container | Workdir | Script Location | Status |
 |------|-----------|---------|-----------------|--------|
-| 1 | `skull_strip_and_create_masks_with_synthstrip` | (default) | N/A | ✅ Fixed |
-| 2 | `combine_t2_files_with_niftymic` | `/app` | `/app/iterative_loop.sh` | ✅ Fixed |
-| 3 | `bias_correct_resample_and_register_to_mni_with_ants` | `/` | `/iterative_loop.sh` | ✅ Fixed |
-| 4 | `segment_tubers_and_quantify_tuber_burden_with_tsccnn3d_dropout` | (default) | N/A | ✅ Fixed |
+| 1 | `skull_strip_and_create_masks_with_synthstrip` | (default) | N/A | Fixed |
+| 2 | `combine_t2_files_with_niftymic` | `/app` | `/app/iterative_loop.sh` | Fixed |
+| 3 | `bias_correct_resample_and_register_to_mni_with_ants` | `/` | `/iterative_loop.sh` | Fixed |
+| 4 | `segment_tubers_and_quantify_tuber_burden_with_tsccnn3d_dropout` | (default) | N/A | Fixed |
 
 **Notes**:
 - Only containers with `iterative_loop.sh` entrypoints need explicit working directories

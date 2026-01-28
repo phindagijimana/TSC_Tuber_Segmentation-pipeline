@@ -38,10 +38,10 @@ def test_docker_availability(logger):
     
     try:
         docker_manager = DockerManager(logger)
-        logger.info("✓ Docker is available and running")
+        logger.info("  Docker is available and running")
         return docker_manager
     except RuntimeError as e:
-        logger.error(f"✗ Docker test failed: {e}")
+        logger.error(f"x Docker test failed: {e}")
         return None
 
 
@@ -54,9 +54,9 @@ def test_gpu_detection(logger):
     
     gpu_available = detect_gpu()
     if gpu_available:
-        logger.info("✓ GPU detected and available")
+        logger.info("  GPU detected and available")
     else:
-        logger.info("⚠ No GPU detected (will use CPU)")
+        logger.info("  No GPU detected (will use CPU)")
     
     return gpu_available
 
@@ -83,11 +83,11 @@ def test_single_container(docker_manager, step_name, image_name, logger):
     
     try:
         docker_manager.pull_image(image_name)
-        logger.info(f"✓ Successfully pulled/verified: {step_name}")
+        logger.info(f"  Successfully pulled/verified: {step_name}")
         return True
         
     except Exception as e:
-        logger.error(f"✗ Failed to pull {step_name}")
+        logger.error(f"x Failed to pull {step_name}")
         logger.error(f"  Error: {e}")
         logger.info("")
         logger.info("Possible solutions:")
@@ -168,8 +168,8 @@ def main():
     passed = sum(1 for v in results.values() if v)
     failed = len(results) - passed
     
-    logger.info(f"Docker available: ✓")
-    logger.info(f"GPU available: {'✓' if gpu_available else '⚠ (CPU only)'}")
+    logger.info(f"Docker available:  ")
+    logger.info(f"GPU available: {' ' if gpu_available else '  (CPU only)'}")
     logger.info(f"Containers tested: {len(results)}")
     logger.info(f"  Passed: {passed}")
     logger.info(f"  Failed: {failed}")
@@ -177,12 +177,12 @@ def main():
     
     if failed > 0:
         logger.error("=" * 60)
-        logger.error("⚠ CONTAINER PULL FAILURES DETECTED")
+        logger.error("  CONTAINER PULL FAILURES DETECTED")
         logger.error("=" * 60)
         logger.error("Failed containers:")
         for step_name, success in results.items():
             if not success:
-                logger.error(f"  ✗ {step_name}")
+                logger.error(f"  x {step_name}")
         
         logger.info("")
         logger.info("Recommendations:")
@@ -200,7 +200,7 @@ def main():
     
     else:
         logger.info("=" * 60)
-        logger.info("✓ ALL TESTS PASSED")
+        logger.info("  ALL TESTS PASSED")
         logger.info("=" * 60)
         logger.info("The pipeline should be able to pull all required containers.")
         logger.info("")

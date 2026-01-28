@@ -297,7 +297,7 @@ main() {
     # Generate batch script
     log "Generating SLURM batch script..."
     local batch_script=$(generate_batch_script)
-    log "  ✓ Generated: ${batch_script}"
+    log "    Generated: ${batch_script}"
     log ""
     
     # Show batch script content if dry-run
@@ -325,7 +325,7 @@ main() {
         error_exit "Could not parse job ID from: ${submit_output}"
     fi
     
-    log "  ✓ Job submitted successfully"
+    log "    Job submitted successfully"
     log "  Job ID: ${job_id}"
     log ""
     

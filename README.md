@@ -16,13 +16,13 @@ This pipeline processes T1, T2, and FLAIR MRI sequences through multiple preproc
 
 ## Features
 
-- ✅ **Fully Automated**: End-to-end processing from raw NIfTI to segmentation results
-- ✅ **GPU Accelerated**: Leverages NVIDIA GPUs for fast segmentation (~54s per subject)
-- ✅ **HPC Ready**: SLURM job submission with resource management
-- ✅ **Container-Based**: Uses Apptainer/Docker containers for reproducibility
-- ✅ **Per-Subject Processing**: Organized output with detailed logging
-- ✅ **Checkpointing**: Resume from any step if interrupted
-- ✅ **Regional Quantification**: Detailed tuber burden by brain lobe
+- **Fully Automated**: End-to-end processing from raw NIfTI to segmentation results
+- **GPU Accelerated**: Leverages NVIDIA GPUs for fast segmentation (~54s per subject)
+- **HPC Ready**: SLURM job submission with resource management
+- **Container-Based**: Uses Apptainer/Docker containers for reproducibility
+- **Per-Subject Processing**: Organized output with detailed logging
+- **Checkpointing**: Resume from any step if interrupted
+- **Regional Quantification**: Detailed tuber burden by brain lobe
 
 ## Requirements
 
@@ -111,7 +111,7 @@ results/
 - **Skull Stripping**: ~2-3 minutes per subject
 - **T2 Combination**: ~10-30 minutes per subject (if multiple T2s)
 - **MNI Registration**: ~1.5 hours per subject
-- **Segmentation (GPU)**: ~54 seconds per subject ⚡
+- **Segmentation (GPU)**: ~54 seconds per subject
 - **Segmentation (CPU)**: ~5-15 minutes per subject
 
 **Total pipeline time**: ~2-3 hours per subject (with GPU)

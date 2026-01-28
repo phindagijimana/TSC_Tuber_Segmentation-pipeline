@@ -212,7 +212,7 @@ class DockerManager:
             )
             
             if result.returncode == 0:
-                self.logger.info("  ✓ Image already available locally")
+                self.logger.info("    Image already available locally")
             else:
                 self.logger.info("  Pulling Docker image (this may take several minutes)...")
                 try:
@@ -222,14 +222,14 @@ class DockerManager:
                         capture_output=True,
                         text=True
                     )
-                    self.logger.info("  ✓ Image pulled successfully")
+                    self.logger.info("    Image pulled successfully")
                 except subprocess.CalledProcessError as e:
                     raise RuntimeError(f"Failed to pull Docker image {image}: {e}")
         
         else:  # apptainer or singularity
             # Apptainer/Singularity pulls on first run if needed
             # We can optionally pre-pull to cache, but not required
-            self.logger.info(f"  ✓ {self.runtime.capitalize()} will pull on first use if needed")
+            self.logger.info(f"    {self.runtime.capitalize()} will pull on first use if needed")
             self.logger.info(f"  Image: docker://{image}")
     
     def run_container(

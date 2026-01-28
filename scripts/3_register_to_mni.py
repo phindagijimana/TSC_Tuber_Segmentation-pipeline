@@ -74,7 +74,7 @@ def process_subject(
     logger.info(f"  Input files: {input_count}")
     
     if input_count == 0:
-        logger.warning("  ⚠ WARNING: No input files found, skipping")
+        logger.warning("    WARNING: No input files found, skipping")
         return False, 0
     
     # Run Docker container
@@ -113,17 +113,17 @@ def process_subject(
         output_files = FileValidator.find_nifti_files(output_dir)
         output_count = len(output_files)
         
-        logger.info(f"  ✓ Completed in {timer.elapsed_str()}")
+        logger.info(f"    Completed in {timer.elapsed_str()}")
         logger.info(f"  Output files: {output_count}")
         
         if output_count == 0:
-            logger.warning("  ⚠ WARNING: No output files generated")
+            logger.warning("    WARNING: No output files generated")
             return False, duration_sec
         
         return True, duration_sec
         
     except Exception as e:
-        logger.error(f"  ✗ Container execution failed: {e}")
+        logger.error(f"  x Container execution failed: {e}")
         return False, 0
 
 
@@ -176,7 +176,7 @@ def main():
         subjects = discover_subjects(input_base, logger)
         logger.info("")
         
-        logger.info("⚠ NOTE: This step is computationally intensive.")
+        logger.info("  NOTE: This step is computationally intensive.")
         logger.info(f"   Expected time per subject: 10-30 minutes")
         logger.info(f"   Total estimated time: {len(subjects) * 15} - {len(subjects) * 30} minutes")
         logger.info("")
@@ -203,10 +203,10 @@ def main():
             if success:
                 success_count += 1
                 total_time += duration
-                logger.info(f"  ✓ {subject} completed successfully")
+                logger.info(f"    {subject} completed successfully")
             else:
                 failed_subjects.append(subject)
-                logger.info(f"  ✗ {subject} failed")
+                logger.info(f"  x {subject} failed")
             
             logger.info("")
         

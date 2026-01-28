@@ -64,13 +64,13 @@ pull_docker_image() {
     log "Checking Docker image: ${image}"
     
     if docker image inspect "$image" &> /dev/null; then
-        log "  ✓ Image already available locally"
+        log "    Image already available locally"
     else
         log "  Pulling Docker image (this may take a few minutes)..."
         if ! docker pull "$image"; then
             error_exit "Failed to pull Docker image: ${image}"
         fi
-        log "  ✓ Image pulled successfully"
+        log "    Image pulled successfully"
     fi
 }
 
@@ -86,7 +86,7 @@ run_registration_for_subject() {
     log "  Input files: ${input_count}"
     
     if [[ $input_count -eq 0 ]]; then
-        log "  ⚠ WARNING: No input files found, skipping"
+        log "    WARNING: No input files found, skipping"
         return 1
     fi
     
@@ -97,7 +97,7 @@ run_registration_for_subject() {
         -v "${subject_input}:/input:ro" \
         -v "${subject_output}:/output" \
         "$DOCKER_IMAGE" >> "$LOG_FILE" 2>&1; then
-        log "  ✗ Container execution failed"
+        log "  x Container execution failed"
         return 1
     fi
     
@@ -109,11 +109,11 @@ run_registration_for_subject() {
     # Validate outputs
     local output_count=$(find "$subject_output" -type f \( -name "*.nii" -o -name "*.nii.gz" \) 2>/dev/null | wc -l)
     
-    log "  ✓ Completed in ${minutes}m ${seconds}s"
+    log "    Completed in ${minutes}m ${seconds}s"
     log "  Output files: ${output_count}"
     
     if [[ $output_count -eq 0 ]]; then
-        log "  ⚠ WARNING: No output files generated"
+        log "    WARNING: No output files generated"
         return 1
     fi
     
@@ -161,7 +161,7 @@ main() {
     log ""
     log "Total subjects: ${#subjects[@]}"
     log ""
-    log "⚠ NOTE: This step is computationally intensive."
+    log "  NOTE: This step is computationally intensive."
     log "   Expected time per subject: 10-30 minutes"
     log "   Total estimated time: $(( ${#subjects[@]} * 15 )) - $(( ${#subjects[@]} * 30 )) minutes"
     log ""
@@ -187,11 +187,11 @@ main() {
             local subject_end=$(date +%s)
             local subject_duration=$((subject_end - subject_start))
             total_time=$((total_time + subject_duration))
-            log "  ✓ ${subject} completed successfully"
+            log "    ${subject} completed successfully"
         else
             ((failed++))
             failed_list+=("$subject")
-            log "  ✗ ${subject} failed"
+            log "  x ${subject} failed"
         fi
         log ""
     done

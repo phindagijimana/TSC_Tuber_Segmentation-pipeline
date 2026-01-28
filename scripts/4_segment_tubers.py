@@ -78,7 +78,7 @@ def process_subject(
     logger.info(f"  Sequences: T1={counts['T1']}, T2={counts['T2']}, FLAIR={counts['FLAIR']}")
     
     if counts["T1"] == 0 or counts["T2"] == 0 or counts["FLAIR"] == 0:
-        logger.warning("  ⚠ WARNING: Missing required sequences, skipping")
+        logger.warning("    WARNING: Missing required sequences, skipping")
         return False, 0
     
     # Run Docker container
@@ -113,17 +113,17 @@ def process_subject(
         ]
         seg_count = len(output_files)
         
-        logger.info(f"  ✓ Completed in {timer.elapsed_str()}")
+        logger.info(f"    Completed in {timer.elapsed_str()}")
         logger.info(f"  Segmentation files: {seg_count}")
         
         if seg_count == 0:
-            logger.warning("  ⚠ WARNING: No segmentation files generated")
+            logger.warning("    WARNING: No segmentation files generated")
             return False, duration_sec
         
         return True, duration_sec
         
     except Exception as e:
-        logger.error(f"  ✗ Container execution failed: {e}")
+        logger.error(f"  x Container execution failed: {e}")
         return False, 0
 
 
@@ -141,7 +141,7 @@ def aggregate_volume_results(results_dir: Path, logger) -> None:
     volume_files = list(results_dir.glob("*/volume_results.txt"))
     
     if not volume_files:
-        logger.warning("  ⚠ No volume results found to aggregate")
+        logger.warning("    No volume results found to aggregate")
         return
     
     # Create aggregated file
@@ -161,7 +161,7 @@ def aggregate_volume_results(results_dir: Path, logger) -> None:
                         if not line.startswith("Subject_ID"):
                             outfile.write(line)
         
-        logger.info(f"  ✓ Aggregated results: {len(volume_files)} subject(s)")
+        logger.info(f"    Aggregated results: {len(volume_files)} subject(s)")
         logger.info(f"  Output: {aggregated_file}")
         
     except Exception as e:
@@ -260,10 +260,10 @@ def main():
             if success:
                 success_count += 1
                 total_time += duration
-                logger.info(f"  ✓ {subject} completed successfully")
+                logger.info(f"    {subject} completed successfully")
             else:
                 failed_subjects.append(subject)
-                logger.info(f"  ✗ {subject} failed")
+                logger.info(f"  x {subject} failed")
             
             logger.info("")
         

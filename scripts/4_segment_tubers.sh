@@ -89,13 +89,13 @@ pull_docker_image() {
     log "Checking Docker image: ${image}"
     
     if docker image inspect "$image" &> /dev/null; then
-        log "  ✓ Image already available locally"
+        log "    Image already available locally"
     else
         log "  Pulling Docker image (this may take several minutes, ~several GB)..."
         if ! docker pull "$image"; then
             error_exit "Failed to pull Docker image: ${image}"
         fi
-        log "  ✓ Image pulled successfully"
+        log "    Image pulled successfully"
     fi
 }
 
@@ -115,7 +115,7 @@ run_segmentation_for_subject() {
     log "  Sequences: T1=${t1_count}, T2=${t2_count}, FLAIR=${flair_count}"
     
     if [[ $t1_count -eq 0 ]] || [[ $t2_count -eq 0 ]] || [[ $flair_count -eq 0 ]]; then
-        log "  ⚠ WARNING: Missing required sequences, skipping"
+        log "    WARNING: Missing required sequences, skipping"
         return 1
     fi
     
@@ -135,7 +135,7 @@ run_segmentation_for_subject() {
     local start_time=$(date +%s)
     
     if ! eval "$docker_cmd" >> "$LOG_FILE" 2>&1; then
-        log "  ✗ Container execution failed"
+        log "  x Container execution failed"
         return 1
     fi
     
@@ -147,11 +147,11 @@ run_segmentation_for_subject() {
     # Validate outputs
     local seg_count=$(find "$subject_output" -type f -name "*seg*" \( -name "*.nii" -o -name "*.nii.gz" \) 2>/dev/null | wc -l)
     
-    log "  ✓ Completed in ${minutes}m ${seconds}s"
+    log "    Completed in ${minutes}m ${seconds}s"
     log "  Segmentation files: ${seg_count}"
     
     if [[ $seg_count -eq 0 ]]; then
-        log "  ⚠ WARNING: No segmentation files generated"
+        log "    WARNING: No segmentation files generated"
         return 1
     fi
     
@@ -180,10 +180,10 @@ aggregate_volume_results() {
     
     if [[ "$found_results" == "true" ]]; then
         local line_count=$(wc -l < "$results_file")
-        log "  ✓ Aggregated results: $((line_count - 1)) subject(s)"
+        log "    Aggregated results: $((line_count - 1)) subject(s)"
         log "  Output: ${results_file}"
     else
-        log "  ⚠ No volume results found to aggregate"
+        log "    No volume results found to aggregate"
     fi
 }
 
@@ -268,11 +268,11 @@ main() {
             local subject_end=$(date +%s)
             local subject_duration=$((subject_end - subject_start))
             total_time=$((total_time + subject_duration))
-            log "  ✓ ${subject} completed successfully"
+            log "    ${subject} completed successfully"
         else
             ((failed++))
             failed_list+=("$subject")
-            log "  ✗ ${subject} failed"
+            log "  x ${subject} failed"
         fi
         log ""
     done

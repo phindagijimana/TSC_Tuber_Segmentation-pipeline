@@ -14,14 +14,14 @@ The TSC Tuber Segmentation Pipeline has been rewritten in **Python** for better 
 
 | Original Bash | New Python | Status |
 |---------------|------------|--------|
-| `0_prepare_data.sh` | `0_prepare_data.py` | ✅ Production |
-| `1_skull_strip.sh` | `1_skull_strip.py` | ✅ Production |
-| `2_combine_t2.sh` | `2_combine_t2.py` | ✅ Production |
-| `3_register_to_mni.sh` | `3_register_to_mni.py` | ✅ Production |
-| `4_segment_tubers.sh` | `4_segment_tubers.py` | ✅ Production |
-| `run_pipeline.sh` | `run_pipeline.py` | ✅ Production |
-| `submit_gpu_job.sh` | `submit_gpu_job.sh` | ⚠️ Updated (calls Python) |
-| `validate_installation.sh` | `validate_installation.sh` | ℹ️ Bash (no change needed) |
+| `0_prepare_data.sh` | `0_prepare_data.py` | Production |
+| `1_skull_strip.sh` | `1_skull_strip.py` | Production |
+| `2_combine_t2.sh` | `2_combine_t2.py` | Production |
+| `3_register_to_mni.sh` | `3_register_to_mni.py` | Production |
+| `4_segment_tubers.sh` | `4_segment_tubers.py` | Production |
+| `run_pipeline.sh` | `run_pipeline.py` | Production |
+| `submit_gpu_job.sh` | `submit_gpu_job.sh` | Updated (calls Python) |
+| `validate_installation.sh` | `validate_installation.sh` | Bash (no change needed) |
 
 ### New Files
 
@@ -41,22 +41,22 @@ The TSC Tuber Segmentation Pipeline has been rewritten in **Python** for better 
 
 ### Advantages Over Bash
 
-1. ✅ **Better Error Handling**: Try/except vs crude `set -e`
-2. ✅ **Cleaner Code**: Pathlib, dataclasses, type hints
-3. ✅ **Testable**: Unit tests, pytest framework ready
-4. ✅ **Maintainable**: Easier refactoring and extension
-5. ✅ **Type Safety**: Type hints for better IDE support
-6. ✅ **Data Structures**: Native dicts, classes vs bash arrays
-7. ✅ **Logging**: Python logging module vs echo/tee
-8. ✅ **Software Package Ready**: Natural foundation for pip/conda package
+1. **Better Error Handling**: Try/except vs crude `set -e`
+2. **Cleaner Code**: Pathlib, dataclasses, type hints
+3. **Testable**: Unit tests, pytest framework ready
+4. **Maintainable**: Easier refactoring and extension
+5. **Type Safety**: Type hints for better IDE support
+6. **Data Structures**: Native dicts, classes vs bash arrays
+7. **Logging**: Python logging module vs echo/tee
+8. **Software Package Ready**: Natural foundation for pip/conda package
 
 ### What Stayed the Same
 
-- ✅ **Same functionality**: 100% feature parity
-- ✅ **Same outputs**: Identical results
-- ✅ **Same Docker images**: No changes to containerized tools
-- ✅ **Same file organization**: Directory structure unchanged
-- ✅ **Same SLURM integration**: GPU job submission works identically
+- **Same functionality**: 100% feature parity
+- **Same outputs**: Identical results
+- **Same Docker images**: No changes to containerized tools
+- **Same file organization**: Directory structure unchanged
+- **Same SLURM integration**: GPU job submission works identically
 
 ---
 
