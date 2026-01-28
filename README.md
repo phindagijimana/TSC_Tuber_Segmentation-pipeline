@@ -44,11 +44,16 @@ All preprocessing and segmentation tools run in containers:
 
 ```bash
 # Clone the repository
-git clone git@github.com:phindagijimana/TSC_Tuber_Segmentation-pipeline.git
+git clone https://github.com/phindagijimana/TSC_Tuber_Segmentation-pipeline.git
 cd TSC_Tuber_Segmentation-pipeline
+
+# Create required directories
+./scripts/setup_directories.sh
 
 # No Python dependencies required (uses standard library only)
 ```
+
+For detailed setup instructions, see [SETUP.md](SETUP.md).
 
 ## Quick Start
 
@@ -140,6 +145,7 @@ python3 scripts/test_docker.py
 
 ## Documentation
 
+- [Complete Setup Guide](SETUP.md) - Start here!
 - [Quick Start Guide](QUICK_START_PYTHON.md)
 - [Implementation Details](implementation.md)
 - [Python Migration Notes](PYTHON_MIGRATION.md)
